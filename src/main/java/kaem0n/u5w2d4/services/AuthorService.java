@@ -62,11 +62,11 @@ public class AuthorService {
         ad.delete(found);
     }
 
-    public String updateAvatar(long id, MultipartFile img) throws IOException {
+    public Author updateAvatar(long id, MultipartFile img) throws IOException {
         Author found = this.findById(id);
         String url = (String) c.uploader().upload(img.getBytes(), ObjectUtils.emptyMap()).get("url");
         found.setAvatar(url);
         ad.save(found);
-        return url;
+        return found;
     }
 }

@@ -58,11 +58,11 @@ public class BlogPostService {
         this.bpd.delete(found);
     }
 
-    public String updateCoverUrl(long id, MultipartFile img) throws IOException {
+    public BlogPost updateCoverUrl(long id, MultipartFile img) throws IOException {
         BlogPost found = this.findById(id);
         String url = (String) c.uploader().upload(img.getBytes(), ObjectUtils.emptyMap()).get("url");
         found.setCoverUrl(url);
         bpd.save(found);
-        return url;
+        return found;
     }
 }

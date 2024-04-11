@@ -51,8 +51,8 @@ public class BlogPostController {
         bps.delete(id);
     }
 
-    @PatchMapping("/{id}/updateCover")
-    private String updateCoverUrl(@PathVariable long id, @RequestParam("cover") MultipartFile img) throws IOException {
+    @PatchMapping("/{id}/cover")
+    private BlogPost updateCoverUrl(@PathVariable long id, @RequestParam("cover") MultipartFile img) throws IOException {
         return bps.updateCoverUrl(id, img);
     }
 }

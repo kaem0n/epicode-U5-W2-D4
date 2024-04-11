@@ -51,8 +51,8 @@ public class AuthorController {
         as.delete(id);
     }
 
-    @PatchMapping("/{id}/updateAvatar")
-    private String updateAvatar(@PathVariable long id, @RequestParam("avatar")MultipartFile img) throws IOException {
+    @PatchMapping("/{id}/avatar")
+    private Author updateAvatar(@PathVariable long id, @RequestParam("avatar")MultipartFile img) throws IOException {
         return as.updateAvatar(id, img);
     }
 }
