@@ -24,8 +24,8 @@ public class BlogPostService {
         return bpd.findAll(p);
     }
 
-    public BlogPost save(NewBlogPostDTO body) {
-        BlogPost newPost = new BlogPost(body.category(), body.title(), body.content(), body.coverUrl(), body.readingTime(), as.findById(body.authorId()));
+    public BlogPost save(NewBlogPostDTO payload) {
+        BlogPost newPost = new BlogPost(payload.category(), payload.title(), payload.content(), payload.coverUrl(), payload.readingTime(), as.findById(payload.authorId()));
         return bpd.save(newPost);
     }
 
@@ -33,14 +33,14 @@ public class BlogPostService {
         return bpd.findById(id).orElseThrow(() -> new NotFoundException(id));
     }
 
-    public BlogPost update(long id, NewBlogPostDTO updatedBody) {
+    public BlogPost update(long id, NewBlogPostDTO payload) {
         BlogPost found = this.findById(id);
-        found.setCategory(updatedBody.category());
-        found.setTitle(updatedBody.title());
-        found.setContent(updatedBody.content());
-        found.setCoverUrl(updatedBody.coverUrl());
-        found.setReadingTime(updatedBody.readingTime());
-        found.setAuthor(as.findById(updatedBody.authorId()));
+        found.setCategory(payload.category());
+        found.setTitle(payload.title());
+        found.setContent(payload.content());
+        found.setCoverUrl(payload.coverUrl());
+        found.setReadingTime(payload.readingTime());
+        found.setAuthor(as.findById(payload.authorId()));
         bpd.save(found);
         return found;
     }

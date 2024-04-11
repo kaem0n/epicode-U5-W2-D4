@@ -26,9 +26,9 @@ public class BlogPostController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    private BlogPost savePost(@RequestBody @Validated NewBlogPostDTO body, BindingResult validation) {
+    private BlogPost savePost(@RequestBody @Validated NewBlogPostDTO payload, BindingResult validation) {
         if (validation.hasErrors()) throw new BadRequestException(validation.getAllErrors());
-        return bps.save(body);
+        return bps.save(payload);
     }
 
     @GetMapping("/{id}")
@@ -37,9 +37,9 @@ public class BlogPostController {
     }
 
     @PutMapping("/{id}")
-    private BlogPost updatePost(@PathVariable long id, @RequestBody NewBlogPostDTO body, BindingResult validation) {
+    private BlogPost updatePost(@PathVariable long id, @RequestBody NewBlogPostDTO payload, BindingResult validation) {
         if (validation.hasErrors()) throw new BadRequestException(validation.getAllErrors());
-        return bps.update(id, body);
+        return bps.update(id, payload);
     }
 
     @DeleteMapping("/{id}")

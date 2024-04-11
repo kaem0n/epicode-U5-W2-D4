@@ -1,10 +1,14 @@
 package kaem0n.u5w2d4.controllers;
 
 import kaem0n.u5w2d4.entities.Author;
+import kaem0n.u5w2d4.exceptions.BadRequestException;
+import kaem0n.u5w2d4.payloads.NewAuthorDTO;
 import kaem0n.u5w2d4.services.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,8 +26,9 @@ public class AuthorController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    private Author saveAuthor(@RequestBody Author body) {
-        return as.save(body);
+    private Author saveAuthor(@RequestBody @Validated NewAuthorDTO payload, BindingResult validation) {
+        if (validation.hasErrors()) throw new BadRequestException(validation.getAllErrors());
+        return as.save(payload);
     }
 
     @GetMapping("/{id}")
@@ -32,8 +37,9 @@ public class AuthorController {
     }
 
     @PutMapping("/{id}")
-    private Author updateAuthor(@PathVariable long id, @RequestBody Author body) {
-        return as.update(id, body);
+    private Author updateAuthor(@PathVariable long id, @RequestBody @Validated NewAuthorDTO payload, BindingResult validation) {
+        if (validation.hasErrors()) throw new BadRequestException(validation.getAllErrors());
+        return as.update(id, payload);
     }
 
     @DeleteMapping("/{id}")
