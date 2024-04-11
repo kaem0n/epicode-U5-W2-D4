@@ -1,5 +1,8 @@
 package kaem0n.u5w2d4.services;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+import kaem0n.u5w2d4.entities.Author;
 import kaem0n.u5w2d4.entities.BlogPost;
 import kaem0n.u5w2d4.exceptions.NotFoundException;
 import kaem0n.u5w2d4.payloads.NewBlogPostDTO;
@@ -10,6 +13,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Service
 public class BlogPostService {
@@ -17,6 +23,8 @@ public class BlogPostService {
     private BlogPostDAO bpd;
     @Autowired
     private AuthorService as;
+    @Autowired
+    private Cloudinary c;
 
     public Page<BlogPost> findAll(int page, int size, String sortBy) {
         if (size > 50) size = 50;
@@ -38,7 +46,7 @@ public class BlogPostService {
         found.setCategory(payload.category());
         found.setTitle(payload.title());
         found.setContent(payload.content());
-        found.setCoverUrl(payload.coverUrl());
+        if(found.getCoverUrl().contains("picsum")) found.setCoverUrl(payload.coverUrl());
         found.setReadingTime(payload.readingTime());
         found.setAuthor(as.findById(payload.authorId()));
         bpd.save(found);
@@ -48,5 +56,13 @@ public class BlogPostService {
     public void delete(long id) {
         BlogPost found = this.findById(id);
         this.bpd.delete(found);
+    }
+
+    public String updateCoverUrl(long id, MultipartFile img) throws IOException {
+        BlogPost found = this.findById(id);
+        String url = (String) c.uploader().upload(img.getBytes(), ObjectUtils.emptyMap()).get("url");
+        found.setCoverUrl(url);
+        bpd.save(found);
+        return url;
     }
 }

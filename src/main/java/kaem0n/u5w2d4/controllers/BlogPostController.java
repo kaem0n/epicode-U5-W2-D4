@@ -10,6 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/blogposts")
@@ -46,5 +49,10 @@ public class BlogPostController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     private void deletePost(@PathVariable long id) {
         bps.delete(id);
+    }
+
+    @PatchMapping("/{id}/updateCover")
+    private String updateCoverUrl(@PathVariable long id, @RequestParam("cover") MultipartFile img) throws IOException {
+        return bps.updateCoverUrl(id, img);
     }
 }

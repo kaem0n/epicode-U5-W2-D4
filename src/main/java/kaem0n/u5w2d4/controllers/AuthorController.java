@@ -10,6 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/authors")
@@ -46,5 +49,10 @@ public class AuthorController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     private void deleteAuthor(@PathVariable long id) {
         as.delete(id);
+    }
+
+    @PatchMapping("/{id}/updateAvatar")
+    private String updateAvatar(@PathVariable long id, @RequestParam("avatar")MultipartFile img) throws IOException {
+        return as.updateAvatar(id, img);
     }
 }
